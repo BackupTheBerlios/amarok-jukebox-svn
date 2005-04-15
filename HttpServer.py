@@ -1,6 +1,8 @@
 #import posixpath
 #import urllib
 import os
+import os.path
+import sys
 import BaseHTTPServer
 from CGIHTTPServer import CGIHTTPRequestHandler
 
@@ -28,7 +30,7 @@ from CGIHTTPServer import CGIHTTPRequestHandler
 class HttpServer:
 
     def __init__(self):
-        os.chdir('www')
+        os.chdir(os.path.dirname(sys.argv[0]) + '/www')
         self.__server = BaseHTTPServer.HTTPServer(('',4475), CGIHTTPRequestHandler)
 #        self.__server = BaseHTTPServer.HTTPServer(('',4475), HttpRequestHandler)
     def serve(self):
