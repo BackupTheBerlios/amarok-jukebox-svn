@@ -7,7 +7,7 @@ import sys
 from AmarokEventHandler import AmarokEventHandler
 from HttpServer import HttpServer
 
-class Mserv:
+class Jukebox:
 
     def __exit_signal_handler(self, signal, frame):
         print "Exiting..."
@@ -27,5 +27,5 @@ class Mserv:
         self.__httpServer.serve()
 
 if __name__ == "__main__":
-    mserv = Mserv()
-    mserv.start()
+    jukebox = Jukebox()
+    jukebox.start()

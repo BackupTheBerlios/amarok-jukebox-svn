@@ -27,6 +27,10 @@ class Collection:
 		return self.select("url, title FROM tags WHERE album = %s ORDER BY track"
 				   % id)
 
+	def getSongTitle(self, url):
+		(title, ) = self.select("title FROM tags WHERE url = \"%s\"" % url).next()
+		return title
+
 	def inCollection(self, url):
 		(count, ) = self.select("count(*) FROM tags WHERE url = \"%s\"" % url).next()
 		return (count > 0)

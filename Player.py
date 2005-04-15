@@ -10,9 +10,10 @@ class Player:
 
     def __init__(self):
         self.__status = 3
+        self.updateStatus()
 
     def updateStatus(self):
-        self.__status = int(Dcop.call("player status").readline())
+        self.__status = int(Dcop.call("player status"))
 
     def status(self):
         return self.StatusString[self.__status]
@@ -31,6 +32,12 @@ class Player:
         self.updateStatus()
         if self.__status != self.Stopped:
             Dcop.call("player stop")
+
+    def prev(self):
+        Dcop.call("player prev")
+
+    def next(self):
+        Dcop.call("player next")
 
     def playMedia(self, url):
         Dcop.call("playlist playMedia \"%s\"" % url.encode('utf-8'))

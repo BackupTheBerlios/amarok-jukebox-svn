@@ -5,10 +5,8 @@ class Error(Exception):
     pass
 
 def call(call):
-    command = "dcop amarok %s" % call
-    #f = os.popen(command)
-    #result = f.readline()
-    #if f.close() is not None:
-    #    raise Error
-    #return result
-    return os.popen(command)
+    f = os.popen("dcop amarok %s" % call)
+    result = f.readline()
+    if f.close() is not None:
+        raise Error
+    return result
