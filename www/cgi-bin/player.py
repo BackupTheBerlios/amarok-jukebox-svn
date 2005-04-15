@@ -24,6 +24,8 @@ def main():
         'Play': { 'action': p.play },
         'Pause': { 'action': p.playPause },
         'Stop': { 'action': p.stop },
+        'Previous': { 'action': p.prev },
+        'Next': { 'action': p.next },
         }
 
     if os.environ['REQUEST_METHOD'] == "GET":

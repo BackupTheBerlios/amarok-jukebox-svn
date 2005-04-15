@@ -7,24 +7,39 @@ import CGI
 from Collection import Collection
 from Playlist import Playlist
 
-CGI.httpHeaders()
+def makeList(a):
+    if not isinstance(a, list):
+        a = [ a ]
+    return a
 
-CGI.htmlHead()
+def printSong(s):
+    print "<p>Added <q>" + s + "</q></p>"
 
-form = cgi.FieldStorage()
+def addSong(p, c, e):
+    [ s ] = p.add(c, e.encode('utf-8'))
+    printSong(s)
 
-c = Collection()
-p = Playlist()
+def addAlbum(p, c, e):
+    for s in p.addAlbum(c, int(e)):
+        printSong(s)
 
-if os.environ['REQUEST_METHOD'] == "POST":
-    if form.has_key('addSongs'):
-        songs = form.getvalue('song')
-        if not isinstance(songs, list):
-            songs = [ songs ]
-        for s in songs:
-            print p.add(c, s.encode('utf-8'))
-    if form.has_key('addAlbum'):
-        print "Not implemented"
+def main():
+    CGI.httpHeaders()
+    CGI.htmlHead()
 
+    form = cgi.FieldStorage()
 
-CGI.htmlTail()
+    c = Collection()
+    p = Playlist()
+
+    if os.environ['REQUEST_METHOD'] == "POST":
+        if form.has_key('addSongs'):
+            for e in makeList(form.getvalue('song')):
+                addSong(p, c, e)
+        elif form.has_key('addAlbums'):
+            for e in makeList(form.getvalue('album')):
+                addAlbum(p, c, e)
+
+    CGI.htmlTail()
+
+main()
