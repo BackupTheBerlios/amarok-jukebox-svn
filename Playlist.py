@@ -4,11 +4,8 @@ import Dcop
 
 class Playlist:
 
-    def __init__(self):
-        self.__file = os.getenv('HOME')+'/.kde/share/apps/amarok/current.xml'
-
-    def __update(self):
-        Dcop.call("playlist saveCurrentPlaylist")
+    def update(self):
+        return Dcop.call("playlist saveCurrentPlaylist")
 
     def __add(self, url):
         Dcop.call("playlist addMedia \"%s\"" % url)
@@ -26,6 +23,9 @@ class Playlist:
             self.__add(url)
             r += [ url ]
         return map(c.getSongTitle, r)
+
+    def clear(self):
+        Dcop.call("playlist clearPlaylist")
 
 #    def index(self):
 #        return os.popen("dcop amarok playlist getActiveIndex" % url)

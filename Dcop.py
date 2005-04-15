@@ -9,4 +9,4 @@ def call(call):
     result = f.readline()
     if f.close() is not None:
         raise Error
-    return result
+    return result.strip()
