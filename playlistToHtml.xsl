@@ -22,6 +22,9 @@
       </span>
     </dt>
     <dd>
+      <xsl:if test="@queue_index">
+	<xsl:attribute name="class">playing</xsl:attribute>
+      </xsl:if>
       <span class="album">
 	<xsl:value-of select="Album"/>
       </span>

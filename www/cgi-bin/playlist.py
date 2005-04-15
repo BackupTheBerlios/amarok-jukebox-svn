@@ -44,7 +44,7 @@ def main():
 
     CGI.httpHeaders()
 
-    CGI.htmlHead()
+    CGI.htmlHead({ 'style':['../playlist.css'] })
         
     if os.environ['REQUEST_METHOD'] == "POST":
         if form.has_key('addSongs'):
