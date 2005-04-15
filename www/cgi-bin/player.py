@@ -7,23 +7,27 @@ import CGI
 
 from Player import Player
 
+p = Player()
+
 def showActions(a):
     print "<form action='" + os.path.basename(sys.argv[0]) + "' method='post'>"
     for k in a.keys():
         print "<input type='submit' name='action' value='" + k + "' />"
     print "</form>"
 
+def stopPlayer():
+    p.playPause()
+    p.stop()
+
 def main():
     CGI.httpHeaders()
     CGI.htmlHead()
     form = cgi.FieldStorage()
 
-    p = Player()
-
     definedActions =  {
         'Play': { 'action': p.play },
         'Pause': { 'action': p.playPause },
-        'Stop': { 'action': p.stop },
+        'Stop': { 'action': stopPlayer },
         'Previous': { 'action': p.prev },
         'Next': { 'action': p.next },
         }
