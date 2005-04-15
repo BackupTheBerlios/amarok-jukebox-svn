@@ -6,6 +6,8 @@ import cgi
 import CGI
 
 from Player import Player
+from Playlist import Playlist
+from Collection import Collection
 
 p = Player()
 
@@ -15,9 +17,12 @@ def showActions(a):
         print "<input type='submit' name='action' value='" + k + "' />"
     print "</form>"
 
-def stopPlayer():
-    p.playPause()
-    p.stop()
+def play():
+    p.play()
+    pl = Playlist()
+    if (pl.index() < 0):
+        c = Collection()
+        p.playMedia(c.randomSong())
 
 def main():
     CGI.httpHeaders()
@@ -25,9 +30,9 @@ def main():
     form = cgi.FieldStorage()
 
     definedActions =  {
-        'Play': { 'action': p.play },
+        'Play': { 'action': play },
         'Pause': { 'action': p.playPause },
-        'Stop': { 'action': stopPlayer },
+        'Stop': { 'action': p.stop },
         'Previous': { 'action': p.prev },
         'Next': { 'action': p.next },
         }

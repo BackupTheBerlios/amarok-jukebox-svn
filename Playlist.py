@@ -7,6 +7,9 @@ class Playlist:
     def update(self):
         return Dcop.call("playlist saveCurrentPlaylist")
 
+    def index(self):
+        return int(Dcop.call("playlist getActiveIndex"))
+
     def __add(self, url):
         Dcop.call("playlist addMedia \"%s\"" % url)
 

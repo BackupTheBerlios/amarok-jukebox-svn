@@ -31,6 +31,8 @@ class Player:
     def stop(self):
         self.updateStatus()
         if self.__status != self.Stopped:
+            # Awful trick
+            Dcop.call("player pause")
             Dcop.call("player stop")
 
     def prev(self):
