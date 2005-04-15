@@ -10,6 +10,9 @@ class Playlist:
     def index(self):
         return int(Dcop.call("playlist getActiveIndex"))
 
+    def isPlaying(self):
+        return self.index() >= 0
+
     def __add(self, url):
         Dcop.call("playlist addMedia \"%s\"" % url)
 

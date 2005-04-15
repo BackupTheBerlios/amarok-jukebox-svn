@@ -7,7 +7,6 @@ import CGI
 
 from Player import Player
 from Playlist import Playlist
-from Collection import Collection
 
 p = Player()
 
@@ -20,9 +19,8 @@ def showActions(a):
 def play():
     p.play()
     pl = Playlist()
-    if (pl.index() < 0):
-        c = Collection()
-        p.playMedia(c.randomSong())
+    if not pl.isPlaying():
+        p.playRandom()
 
 def main():
     CGI.httpHeaders()

@@ -1,4 +1,5 @@
 import Dcop
+from Collection import Collection
 
 class Player:
 
@@ -43,3 +44,8 @@ class Player:
 
     def playMedia(self, url):
         Dcop.call("playlist playMedia \"%s\"" % url.encode('utf-8'))
+
+    def playRandom(self, c = None):
+        if c is None:
+            c = Collection()
+        self.playMedia(c.randomSong())
