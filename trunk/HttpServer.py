@@ -67,6 +67,8 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         p = self.__absPath()
         key = p[len(self.__internal_path):]
         if urls.has_key(key):
+            if self.command == 'POST':
+                self.__getFormFields()
             self.send_response(200)
             self.wfile.write(urls[key].serve(self))
         else:

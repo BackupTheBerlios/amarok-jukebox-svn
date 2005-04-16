@@ -45,7 +45,7 @@
 	<dl>
 	  <xsl:apply-templates />
 	</dl>
-	<form action='/cgi-bin/playlist.py' method='post'>
+	<form action='playlist' method='post'>
 	  <input type='submit' name='clear' value='Clear Play List' />
 	  <input type='submit' name='clearAndStop'
 		 value='Clear Play List And Stop Player' />
