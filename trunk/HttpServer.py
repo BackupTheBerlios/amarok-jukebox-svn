@@ -59,16 +59,16 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             CGIHTTPRequestHandler.do_HEAD(self);
             
     def __do_internal(self):
+        urls =  {
+            'browse': browse,
+            'player': player,
+            'playlist': playlist,
+        }
         p = self.__absPath()
-        if p == self.__internal_path + 'browse':
+        key = p[len(self.__internal_path):]
+        if urls.has_key(key):
             self.send_response(200)
-            self.wfile.write(browse.serve(self))
-        elif p == self.__internal_path + 'player':
-            self.send_response(200)
-            self.wfile.write(player.serve(self))
-        elif p == self.__internal_path + 'playlist':
-            self.send_response(200)
-            self.wfile.write(playlist.serve(self))
+            self.wfile.write(urls[key].serve(self))
         else:
             self.send_response(404)
 
