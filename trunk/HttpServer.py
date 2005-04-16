@@ -1,37 +1,53 @@
-#import posixpath
-#import urllib
+import re
 import os
-import os.path
 import sys
 import BaseHTTPServer
+import cgi
 from CGIHTTPServer import CGIHTTPRequestHandler
 
-# class HttpRequestHandler(CGIHTTPRequestHandler):
+import browse
 
-#         """Translate a /-separated PATH to the local filename syntax.
+class HttpRequestHandler(CGIHTTPRequestHandler):
 
-#         Components that mean special things to the local file system
-#         (e.g. drive or directory names) are ignored.  (XXX They should
-#         probably be diagnosed.)
+    __internal_path = '/jukebox/'
 
-#         """
-#         path = posixpath.normpath(urllib.unquote(path))
-#         words = path.split('/')
-#         words = filter(None, words)
-#         path = os.getcwd() + 'www'
-#         for word in words:
-#             drive, word = os.path.splitdrive(word)
-#             head, word = os.path.split(word)
-#             if word in (os.curdir, os.pardir): continue
-#             path = os.path.join(path, word)
-#         return path
+    def __absPath(self):
+        s = self.path.split("?")
+        return s[0]
 
+    def queryParams(self):
+        s = self.path.split("?")
+        if len(s) <= 1:
+            return {}
+        else:
+            return cgi.parse_qs(s[1])
+
+    def is_internal(self):
+        p = re.compile('^' + self.__internal_path)
+        return p.match(self.path)
+            
+    def do_GET(self):
+        if self.is_internal():
+            p = self.__absPath()
+            if p == self.__internal_path + 'browse':
+                self.send_response(200)
+                doc = browse.main(self)
+                self.wfile.write(doc)
+            else:
+                self.send_response(404)
+        else:
+            CGIHTTPRequestHandler.do_GET(self);
+
+    def do_POST(self):
+        if self.is_internal():
+            sys.stderr.write("foo")
+        else:
+            CGIHTTPRequestHandler.do_POST(self);
 
 class HttpServer:
 
     def __init__(self):
         os.chdir(os.path.dirname(sys.argv[0]) + '/www')
-        self.__server = BaseHTTPServer.HTTPServer(('',4475), CGIHTTPRequestHandler)
-#        self.__server = BaseHTTPServer.HTTPServer(('',4475), HttpRequestHandler)
+        self.__server = BaseHTTPServer.HTTPServer(('',4475), HttpRequestHandler)
     def serve(self):
         self.__server.serve_forever()
