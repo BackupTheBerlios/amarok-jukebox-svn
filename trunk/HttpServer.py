@@ -10,6 +10,8 @@ import browse
 import playlist
 import player
 
+jukeboxState = None
+
 class MyFieldStorage(cgi.FieldStorage):
 
     def __init__(self):
@@ -23,6 +25,11 @@ class MyFieldStorage(cgi.FieldStorage):
 class HttpRequestHandler(CGIHTTPRequestHandler):
 
     __internal_path = '/jukebox/'
+
+    def __init__(self, a, b, c):
+        global jukeboxState
+        self.state = jukeboxState
+        CGIHTTPRequestHandler.__init__(self, a, b, c)
 
     def __absPath(self):
         s = self.path.split("?")
@@ -82,7 +89,9 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
 
 class HttpServer:
 
-    def __init__(self):
+    def __init__(self, state):
+        global jukeboxState
+        jukeboxState = state
         os.chdir(os.path.dirname(sys.argv[0]) + '/www')
         self.__server = BaseHTTPServer.HTTPServer(('',4475), HttpRequestHandler)
     def serve(self):

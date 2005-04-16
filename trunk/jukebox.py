@@ -4,6 +4,7 @@ import signal
 import threading
 import sys
 
+from State import State
 from AmarokEventHandler import AmarokEventHandler
 from HttpServer import HttpServer
 
@@ -15,8 +16,9 @@ class Jukebox:
         sys.exit(0)
 
     def __init__(self):
-        self.__eventHandler = AmarokEventHandler()
-        self.__httpServer = HttpServer()
+        self.state = State()
+        self.__eventHandler = AmarokEventHandler(self.state)
+        self.__httpServer = HttpServer(self.state)
         signal.signal(signal.SIGINT, self.__exit_signal_handler)
         signal.signal(signal.SIGKILL, self.__exit_signal_handler)
         signal.signal(signal.SIGTERM, self.__exit_signal_handler)

@@ -1,17 +1,16 @@
 import sys
 import select
 import os
-import time
 
 from Player import Player
 from Playlist import Playlist
 
 class AmarokEventHandler:
 
-    def __init__(self):
+    def __init__(self, state):
         self.__running = True;
         self.__player = Player()
-        self.__last = -1
+        self.__state = state
 
     def start(self):
         while self.__running:
@@ -27,20 +26,13 @@ class AmarokEventHandler:
         self.__running = False
 
     def __dispatch(self, s):
-        now = time.time()
-        sys.stderr.write("%i \n" % now)
         if s.find("engineStateChange: empty" ) >= 0:
-            # The following is a trick to make stop work; there's got to be a way to talk to this
-            # thread
-            # Issue: it doesn't work from Amarok itself
-            if (now - self.__last >= 3):
+            if self.__state.isRunning():
+                sys.stderr.write("Unknown notification: " + s + " -> ignoring\n")
                 self.__player.playRandom()
-            else:
-                sys.stderr.write("Too soon: skipping\n")
         elif s.find("trackChange" ) >= 0:
             pl = Playlist()
             if not pl.isPlaying():
                 self.__player.playRandom()                
         else:
             sys.stderr.write("Unknown notification: " + s + " -> ignoring\n")
-        self.__last = now
