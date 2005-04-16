@@ -31,7 +31,7 @@ def songsByAlbumHtml(c, id):
     s += "</form>"
     return s
 
-def main(request):
+def serve(request):
     doc = CGI.httpHeaders()
     doc += CGI.htmlHead()
     

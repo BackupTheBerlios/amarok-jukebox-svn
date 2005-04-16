@@ -1,7 +1,3 @@
-#!/usr/bin/python
-
-import os
-import cgi
 import CGI
 import sys
 
@@ -32,12 +28,12 @@ def addAlbum(p, c, e):
 
 def playlistToHtml(s, p):
     styledoc = libxml2.parseFile('../playlistToHtml.xsl')
-    style = libxslt.parseStylesheetDoc(styledoc)
+    style = libxslt.parseStyleasheetDoc(styledoc)
     doc = libxml2.parseFile(s)
     result = style.applyStylesheet(doc, None)
     return style.saveResultToString(result)
 
-def main(request):
+def serve(request):
 
     c = Collection()
     p = Playlist()

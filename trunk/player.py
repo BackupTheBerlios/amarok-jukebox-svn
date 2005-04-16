@@ -1,7 +1,3 @@
-#!/usr/bin/python
-
-import os
-import sys
 import cgi
 import CGI
 
@@ -11,10 +7,11 @@ from Playlist import Playlist
 p = Player()
 
 def showActions(a):
-    print "<form action='" + os.path.basename(sys.argv[0]) + "' method='post'>"
+    s = "<form action='player' method='post'>"
     for k in a.keys():
-        print "<input type='submit' name='action' value='" + k + "' />"
-    print "</form>"
+        s += "<input type='submit' name='action' value='" + k + "' />"
+    s += "</form>"
+    return s
 
 def play():
     p.play()
@@ -22,10 +19,9 @@ def play():
     if not pl.isPlaying():
         p.playRandom()
 
-def main():
-    CGI.httpHeaders()
-    CGI.htmlHead()
-    form = cgi.FieldStorage()
+def serve(request):
+    doc = CGI.httpHeaders()
+    doc += CGI.htmlHead()
 
     definedActions =  {
         'Play': { 'action': play },
@@ -35,17 +31,17 @@ def main():
         'Next': { 'action': p.next },
         }
 
-    if os.environ['REQUEST_METHOD'] == "GET":
-        showActions(definedActions)
-    elif os.environ['REQUEST_METHOD'] == "POST":
+    if request.command == "POST":
+        form = request.form
         if form.has_key('action'):
             action = form.getvalue('action')
             if definedActions.has_key(action):
                 definedActions[action]['action']()
             else:
-                print "Error!"
-        showActions(definedActions)
+                doc += "Error!"
 
-    CGI.htmlTail()
+    doc += showActions(definedActions)
 
-main()
+    doc += CGI.htmlTail()
+
+    return doc

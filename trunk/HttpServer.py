@@ -8,6 +8,7 @@ from CGIHTTPServer import CGIHTTPRequestHandler
 # Request handlers
 import browse
 import playlist
+import player
 
 class MyFieldStorage(cgi.FieldStorage):
 
@@ -43,13 +44,22 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
     def is_internal(self):
         p = re.compile('^' + self.__internal_path)
         return p.match(self.path)
+
+    def do_HEAD(self):
+        if self.is_internal():
+            self.send_response(501)
+        else:
+            CGIHTTPRequestHandler.do_HEAD(self);
             
     def do_GET(self):
         if self.is_internal():
             p = self.__absPath()
             if p == self.__internal_path + 'browse':
                 self.send_response(200)
-                self.wfile.write(browse.main(self))
+                self.wfile.write(browse.serve(self))
+            elif p == self.__internal_path + 'player':
+                self.send_response(200)
+                self.wfile.write(player.serve(self))
             else:
                 self.send_response(404)
         else:
@@ -61,7 +71,10 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             self.__getFormFields()
             if p == self.__internal_path + 'playlist':
                 self.send_response(200)
-                self.wfile.write(playlist.main(self))
+                self.wfile.write(playlist.serve(self))
+            elif p == self.__internal_path + 'player':
+                self.send_response(200)
+                self.wfile.write(player.serve(self))
             else:
                 self.send_response(404)
         else:
