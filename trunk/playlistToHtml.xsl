@@ -11,7 +11,7 @@
   <xsl:template match="item">
     <dt>
       <xsl:if test="@queue_index">
-	<xsl:attribute name="class">playing</xsl:attribute>
+	<xsl:attribute name="id">playing</xsl:attribute>
       </xsl:if>
       <span class="artist">
 	<xsl:value-of select="Artist"/>
@@ -23,7 +23,7 @@
     </dt>
     <dd>
       <xsl:if test="@queue_index">
-	<xsl:attribute name="class">playing</xsl:attribute>
+	<xsl:attribute name="id">playing</xsl:attribute>
       </xsl:if>
       <span class="album">
 	<xsl:value-of select="Album"/>

@@ -28,7 +28,7 @@ def addAlbum(p, c, e):
 
 def playlistToHtml(s, p):
     styledoc = libxml2.parseFile('../playlistToHtml.xsl')
-    style = libxslt.parseStyleasheetDoc(styledoc)
+    style = libxslt.parseStylesheetDoc(styledoc)
     doc = libxml2.parseFile(s)
     result = style.applyStylesheet(doc, None)
     return style.saveResultToString(result)

@@ -58,32 +58,29 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         else:
             CGIHTTPRequestHandler.do_HEAD(self);
             
+    def __do_internal(self):
+        p = self.__absPath()
+        if p == self.__internal_path + 'browse':
+            self.send_response(200)
+            self.wfile.write(browse.serve(self))
+        elif p == self.__internal_path + 'player':
+            self.send_response(200)
+            self.wfile.write(player.serve(self))
+        elif p == self.__internal_path + 'playlist':
+            self.send_response(200)
+            self.wfile.write(playlist.serve(self))
+        else:
+            self.send_response(404)
+
     def do_GET(self):
         if self.is_internal():
-            p = self.__absPath()
-            if p == self.__internal_path + 'browse':
-                self.send_response(200)
-                self.wfile.write(browse.serve(self))
-            elif p == self.__internal_path + 'player':
-                self.send_response(200)
-                self.wfile.write(player.serve(self))
-            else:
-                self.send_response(404)
+            self.__do_internal()
         else:
             CGIHTTPRequestHandler.do_GET(self);
 
     def do_POST(self):
         if self.is_internal():
-            p = self.__absPath()
-            self.__getFormFields()
-            if p == self.__internal_path + 'playlist':
-                self.send_response(200)
-                self.wfile.write(playlist.serve(self))
-            elif p == self.__internal_path + 'player':
-                self.send_response(200)
-                self.wfile.write(player.serve(self))
-            else:
-                self.send_response(404)
+            self.__do_internal()
         else:
             CGIHTTPRequestHandler.do_POST(self);
 
