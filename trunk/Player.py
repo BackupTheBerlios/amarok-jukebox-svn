@@ -11,7 +11,6 @@ class Player:
 
     def __init__(self):
         self.__status = 3
-        self.updateStatus()
 
     def updateStatus(self):
         self.__status = int(Dcop.call("player status"))
