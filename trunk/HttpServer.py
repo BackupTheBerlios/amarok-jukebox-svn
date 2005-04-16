@@ -5,7 +5,19 @@ import BaseHTTPServer
 import cgi
 from CGIHTTPServer import CGIHTTPRequestHandler
 
+# Request handlers
 import browse
+import playlist
+
+class MyFieldStorage(cgi.FieldStorage):
+
+    def __init__(self):
+        self.list = []
+
+    def append(self, item):
+        self.list.append(item)
+
+
 
 class HttpRequestHandler(CGIHTTPRequestHandler):
 
@@ -22,6 +34,12 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         else:
             return cgi.parse_qs(s[1])
 
+    def __getFormFields(self):
+        qs = self.rfile.read(int(self.headers.getheader('content-length')))
+        self.form = MyFieldStorage()
+        for key, value in cgi.parse_qsl(qs):
+            self.form.append(cgi.MiniFieldStorage(key, value))
+
     def is_internal(self):
         p = re.compile('^' + self.__internal_path)
         return p.match(self.path)
@@ -31,8 +49,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             p = self.__absPath()
             if p == self.__internal_path + 'browse':
                 self.send_response(200)
-                doc = browse.main(self)
-                self.wfile.write(doc)
+                self.wfile.write(browse.main(self))
             else:
                 self.send_response(404)
         else:
@@ -40,7 +57,13 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
 
     def do_POST(self):
         if self.is_internal():
-            sys.stderr.write("foo")
+            p = self.__absPath()
+            self.__getFormFields()
+            if p == self.__internal_path + 'playlist':
+                self.send_response(200)
+                self.wfile.write(playlist.main(self))
+            else:
+                self.send_response(404)
         else:
             CGIHTTPRequestHandler.do_POST(self);
 

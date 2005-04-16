@@ -1,4 +1,3 @@
-import os
 import cgi
 import CGI
 import urllib
