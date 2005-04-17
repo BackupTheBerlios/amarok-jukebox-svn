@@ -62,7 +62,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             'player': player,
             'playlist': playlist,
         }
-        sys.excepthook = cgitb.Hook(file=self.wfile)
+        p = self.__absPath()
         key = p[len(self.__internal_path):]
         if urls.has_key(key):
             if self.command == 'POST':
