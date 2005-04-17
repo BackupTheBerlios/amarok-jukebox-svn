@@ -1,5 +1,4 @@
 import sys, os.path
-import cgitb; cgitb.enable()
 
 def httpHeaders():
     h = "Content-Type: text/html; charset='utf-8'\n"
