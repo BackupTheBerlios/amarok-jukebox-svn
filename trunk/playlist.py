@@ -56,6 +56,7 @@ def serve(request):
             p.clear()
         elif form.has_key('clearAndStop'):
             p.clear()
+            request.state.stop()
             player.stop()
 
     f = p.update()
