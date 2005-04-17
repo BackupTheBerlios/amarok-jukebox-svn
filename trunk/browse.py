@@ -7,8 +7,11 @@ from Collection import Collection
 def artistsHtml(c):
     s = "<ul>"
     for id, name in c.artists():
-        s += "<li><a href='browse?artist=%s'>%s</a></li>" % (id , cgi.escape(name.encode('utf-8')))
-        s += "</ul>"
+        n = cgi.escape(name.encode('utf-8'))
+        if n == "":
+            n = "<em>Unknown</em>"
+        s += "<li><a href='browse?artist=%s'>%s</a></li>" % (id , n)
+    s += "</ul>"
     return s
 
 def albumsByArtistHtml(c, id):
