@@ -20,8 +20,6 @@ class MyFieldStorage(cgi.FieldStorage):
     def append(self, item):
         self.list.append(item)
 
-
-
 class HttpRequestHandler(CGIHTTPRequestHandler):
 
     __internal_path = '/jukebox/'
@@ -64,7 +62,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             'player': player,
             'playlist': playlist,
         }
-        p = self.__absPath()
+        sys.excepthook = cgitb.Hook(file=self.wfile)
         key = p[len(self.__internal_path):]
         if urls.has_key(key):
             if self.command == 'POST':
