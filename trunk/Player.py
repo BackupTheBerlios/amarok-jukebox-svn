@@ -16,7 +16,7 @@ class Player:
         self.__status = int(Dcop.call("player status"))
 
     def status(self):
-        return self.StatusString[self.__status]
+        return self.__status
 
     def play(self):
         self.updateStatus()
