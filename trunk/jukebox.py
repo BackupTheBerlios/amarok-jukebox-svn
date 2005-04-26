@@ -15,10 +15,13 @@ class Jukebox:
         self.__eventHandler.stop()
         sys.exit(0)
 
-    def __init__(self):
+    def __init__(self, port = -1):
         self.state = State()
         self.__eventHandler = AmarokEventHandler(self.state)
-        self.__httpServer = HttpServer(self.state)
+        if port == -1:
+            self.__httpServer = HttpServer(self.state)
+        else:
+            self.__httpServer = HttpServer(self.state, port)
         signal.signal(signal.SIGINT, self.__exit_signal_handler)
         signal.signal(signal.SIGKILL, self.__exit_signal_handler)
         signal.signal(signal.SIGTERM, self.__exit_signal_handler)
@@ -29,5 +32,8 @@ class Jukebox:
         self.__httpServer.serve()
 
 if __name__ == "__main__":
-    jukebox = Jukebox()
+    if len(sys.argv) < 2:
+        jukebox = Jukebox()
+    else:
+        jukebox = Jukebox(int(sys.argv[1]))        
     jukebox.start()

@@ -86,10 +86,10 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
 
 class HttpServer:
 
-    def __init__(self, state):
+    def __init__(self, state, port = 4475):
         global jukeboxState
         jukeboxState = state
         os.chdir(os.path.dirname(sys.argv[0]) + '/www')
-        self.__server = BaseHTTPServer.HTTPServer(('',4475), HttpRequestHandler)
+        self.__server = BaseHTTPServer.HTTPServer(('',port), HttpRequestHandler)
     def serve(self):
         self.__server.serve_forever()
