@@ -35,6 +35,23 @@ class Collection:
 		(count, ) = self.select("count(*) FROM tags WHERE url = \"%s\"" % url).next()
 		return (count > 0)
 
+	def isCover(self, url):
+		return self.__checkCount('images', 'path', url)
+
+	def __checkCount(self, table, field, value):
+		(count, ) = self.select("count(*) FROM %s WHERE %s = \"%s\""
+					% (table, field, value)).next()
+		return (count > 0)
+
+	def albumCover(self, artist, album):
+		r = self.select("path FROM images WHERE artist = \"%s\" AND album = \"%s\""
+				% (artist, album))
+		try:
+			(url, ) =  r.next()
+			return url
+		except:
+			return None
+
 	def randomSong(self):
 		(count, ) = self.select("count(*) FROM tags").next()
 		(url, ) = self.select("url FROM tags LIMIT 1 OFFSET %s" % random.randint(0, count-1)).next()

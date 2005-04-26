@@ -1,9 +1,8 @@
 import sys, os.path
 
-def httpHeaders():
-    h = "Content-Type: text/html; charset='utf-8'\n"
-    h += "Cache-Control: no-cache\n\n"
-    return h
+def httpHeaders(type = "text/html; charset='utf-8'"):
+    h = "Content-Type: %s\n" % type
+    return h + "\n"
 
 def htmlHead(params = { }):
     h = """<?xml version=\"1.0\"?>

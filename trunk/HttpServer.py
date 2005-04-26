@@ -28,6 +28,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
     def __init__(self, a, b, c):
         global jukeboxState
         self.state = jukeboxState
+
         CGIHTTPRequestHandler.__init__(self, a, b, c)
 
     def __absPath(self):
