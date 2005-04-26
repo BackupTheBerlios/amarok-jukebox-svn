@@ -10,7 +10,7 @@ def artistsHtml(c):
         n = cgi.escape(name.encode('utf-8'))
         if n == "":
             n = "<em>Unknown</em>"
-        s += "<li><a href='browse?artist=%s'>%s</a></li>" % (id , n)
+        s += "<li><a href=\"browse?artist=%s\">%s</a></li>" % (id , n)
     s += "</ul>"
     return s
 
@@ -18,7 +18,7 @@ def albumsByArtistHtml(c, id):
     s = "<form action='playlist' method='post'>"
     s += "<ul>"
     for id, name in c.albumsByArtist(id):
-        s += "<li><input type='checkbox' name='album' value='%s' /> <a href='browse?album=%s'>%s</a></li>" % (id, id , cgi.escape(name.encode('utf-8')))
+        s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s\">%s</a></li>" % (id, id , cgi.escape(name.encode('utf-8')))
     s += "</ul>"
     s += "<input type='submit' name='addAlbums' value='Queue selected entire albums' />"
     s += "</form>"
@@ -28,7 +28,7 @@ def songsByAlbumHtml(c, id):
     s = "<form action='playlist' method='post'>"
     s += "<ol>"
     for url, title in c.songsByAlbum(id):
-        s += "<li><input type='checkbox' name='song' value='%s' /> <a href='browse?song=%s'>%s</a></li>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
+        s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a></li>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
     s += "</form>"
