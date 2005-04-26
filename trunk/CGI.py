@@ -11,7 +11,7 @@ def htmlHead(params = { }):
 \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"""
     h += "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
     h += """<head>
-<title>amaroK juKebok</title>"""
+<title>amaroK juKebox</title>"""
     if params.has_key('style'):
         for s in params['style']:
             h+= "<link rel='stylesheet' type='text/css' href='%s' />" % s
