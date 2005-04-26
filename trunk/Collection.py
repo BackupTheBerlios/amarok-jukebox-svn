@@ -32,8 +32,7 @@ class Collection:
 		return title
 
 	def inCollection(self, url):
-		(count, ) = self.select("count(*) FROM tags WHERE url = \"%s\"" % url).next()
-		return (count > 0)
+		return self.__checkCount('tags', 'url', url)
 
 	def isCover(self, url):
 		return self.__checkCount('images', 'path', url)
