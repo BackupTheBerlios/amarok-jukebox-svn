@@ -19,15 +19,17 @@ def albumsByArtistHtml(c, id):
     s += "<h1>Albums by %s</h1>" % c.getName('artist', id).encode('utf-8')
     s += "<form action='playlist' method='post'>"
     s += "<ul>"
-    for id, name in c.albumsByArtist(id):
-        s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s\">%s</a></li>" % (id, id , cgi.escape(name.encode('utf-8')))
+    for ai, name in c.albumsByArtist(id):
+        s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s&amp;from=%s\">%s</a></li>" % (ai, ai, id, cgi.escape(name.encode('utf-8')))
     s += "</ul>"
     s += "<input type='submit' name='addAlbums' value='Queue selected entire albums' />"
     s += "</form>"
     return s
 
-def songsByAlbumHtml(c, id):
-    s = "<h1>Albums by %s</h1>" % c.getName('album', id).encode('utf-8')
+def songsByAlbumHtml(c, id, artist):
+    artistName = c.getName('artist', artist).encode('utf-8')
+    s = "<p><a href='browse?artist=%s'>Up to list of albums by %s</a></p>" % (artist, artistName)
+    s += "<h1>Tracks on %s by %s</h1>" % (c.getName('album', id).encode('utf-8'), artistName)
     s += "<form action='playlist#playing' method='post'>"
     s += "<ol>"
     for url, title in c.songsByAlbum(id):
@@ -50,7 +52,7 @@ def serve(request):
         elif qp.has_key('artist'):
             doc += albumsByArtistHtml(c, qp['artist'][0])
         elif qp.has_key('album'):
-            doc += songsByAlbumHtml(c, qp['album'][0])
+            doc += songsByAlbumHtml(c, qp['album'][0], qp['from'][0])
         else:
             print "Wrong URL!"
 
