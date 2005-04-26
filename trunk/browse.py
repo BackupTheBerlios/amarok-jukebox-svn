@@ -25,7 +25,7 @@ def albumsByArtistHtml(c, id):
     return s
 
 def songsByAlbumHtml(c, id):
-    s = "<form action='playlist' method='post'>"
+    s = "<form action='playlist#playing' method='post'>"
     s += "<ol>"
     for url, title in c.songsByAlbum(id):
         s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a></li>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))

@@ -71,7 +71,8 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
                 self.__getFormFields()
             self.send_response(200)
             try:
-                self.wfile.write(urls[key].serve(self))
+                response = urls[key].serve(self)
+                self.wfile.write(response)
             except:
                 h.handle((sys.exc_type, sys.exc_value, sys.exc_traceback))
         else:

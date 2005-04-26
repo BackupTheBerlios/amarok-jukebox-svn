@@ -14,10 +14,10 @@ def makeList(a):
     return a
 
 def printSong(s):
-    return "<p>Added <q>" + s + "</q></p>"
+    return "<p>Added <q>" + s.encode('utf-8') + "</q></p>"
 
 def addSong(p, c, e):
-    [ s ] = p.add(c, e.encode('utf-8'))
+    [ s ] = p.add(c, e.decode('utf-8'))
     return printSong(s)
 
 def addAlbum(p, c, e):

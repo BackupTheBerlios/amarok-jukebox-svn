@@ -13,6 +13,7 @@ class Jukebox:
     def __exit_signal_handler(self, signal, frame):
         print "Exiting..."
         self.__eventHandler.stop()
+        sys.getdefaultencoding = lambda: 'utf-8' 
         sys.exit(0)
 
     def __init__(self, port = -1):
