@@ -3,6 +3,7 @@ import os
 import sys
 import BaseHTTPServer
 import cgi
+import cgitb
 from CGIHTTPServer import CGIHTTPRequestHandler
 
 # Request handlers
@@ -57,6 +58,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             CGIHTTPRequestHandler.do_HEAD(self);
             
     def __do_internal(self):
+        h = cgitb.Hook(file=self.wfile)
         urls =  {
             'browse': browse,
             'player': player,
@@ -68,7 +70,10 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             if self.command == 'POST':
                 self.__getFormFields()
             self.send_response(200)
-            self.wfile.write(urls[key].serve(self))
+            try:
+                self.wfile.write(urls[key].serve(self))
+            except:
+                h.handle((sys.exc_type, sys.exc_value, sys.exc_traceback))
         else:
             self.send_response(404)
 
@@ -93,3 +98,4 @@ class HttpServer:
         self.__server = BaseHTTPServer.HTTPServer(('',port), HttpRequestHandler)
     def serve(self):
         self.__server.serve_forever()
+
