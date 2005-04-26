@@ -30,18 +30,47 @@ def albumsByArtistHtml(c, id):
 def songsByAlbumHtml(c, album, artist):
     artistName = c.getName('artist', artist).encode('utf-8')
     albumName = c.getName('album', album).encode('utf-8')
-    cover = c.albumCover(artistName, albumName)
     s = "<p><a href='browse?artist=%s'>Up to list of albums by %s</a></p>" % (artist, artistName)
     s += "<h1>Tracks on %s by %s</h1>" % (albumName, artistName)
-    if cover is not None:
-        s += "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(cover.encode('utf-8'))
+    s += albumCoverP(c, artistName, albumName)
     s += "<form action='playlist#playing' method='post'>"
     s += "<ol id='list'>"
     for url, title in c.songsByAlbum(album):
-        s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a></li>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
+        s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
+        coll = Collection()
+        d = coll.songDetails(url)
+        s += " (%s)" % d['length']
+        s += "</li>"
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
     s += "</form>"
+    return s
+
+def albumCoverP(c, artist, album):
+    cover = c.albumCover(artist, album)
+    if cover is not None:
+        return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(cover.encode('utf-8'))
+    else:
+        return ""
+
+def songHtml(c, song):
+    d = c.songDetails(song)
+    s = "<h1>%s</h1>" % d['title']
+    s += albumCoverP(c, d['artist'], d['album'])
+    s += "<dl>"
+    s += "<dt>Artist</dt>"
+    s += "<dd>%s</dd>" % d['artist']
+    s += "<dt>Album</dt>"
+    s += "<dd>%s</dd>" % d['album']
+    s += "<dt>Length</dt>"
+    s += "<dd>%s</dd>" % d['length']
+    s += "<dt>Year</dt>"
+    s += "<dd>%s</dd>" % d['year']
+    s += "<dt>Genre</dt>"
+    s += "<dd>%s</dd>" % d['genre']
+    s += "<dt>Bitrate</dt>"
+    s += "<dd>%s</dd>" % d['bitrate']
+    s += "</dl>"
     return s
 
 def serveCover(request, c, cover):
@@ -67,6 +96,8 @@ def serve(request):
         doc += albumsByArtistHtml(c, qp['artist'][0])
     elif qp.has_key('album'):
         doc += songsByAlbumHtml(c, qp['album'][0], qp['from'][0])
+    elif qp.has_key('song'):
+        doc += songHtml(c, qp['song'][0])
     else:
         request.send_error(406, "What do you want to browse?")
 

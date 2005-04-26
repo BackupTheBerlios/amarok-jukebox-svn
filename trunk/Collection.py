@@ -51,6 +51,25 @@ class Collection:
 		except:
 			return None
 
+	def songDetails(self, song):
+		result = {}
+		try:
+			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.select("artist.name, album.name, tags.genre, tags.title, tags.year, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id" % song).next()
+			result['artist'] = artist
+			result['album'] = album
+			result['genre'] = genre
+			result['title'] = title
+			result['year'] = year
+			result['comment'] = comment
+			result['track'] = track
+			result['bitrate'] = bitrate
+			length = int(length)
+			result['length'] = "%d\"%02d" % (length / 60, length % 60)
+			result['samplerate'] = samplerate
+		except:
+			return None
+		return result
+
 	def randomSong(self):
 		(count, ) = self.select("count(*) FROM tags").next()
 		(url, ) = self.select("url FROM tags LIMIT 1 OFFSET %s" % random.randint(0, count-1)).next()
