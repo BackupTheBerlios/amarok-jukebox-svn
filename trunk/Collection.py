@@ -15,10 +15,10 @@ class Collection:
 		return self.select("id, name FROM artist WHERE name LIKE '%s' ORDER BY name"
 				   % filter)
 
-	def albumsByArtist(self, id):
-		return self.select("DISTINCT album.id, album.name FROM album, tags WHERE tags.artist = %s AND album.id = tags.album ORDER BY album.year, album.name"
-				   % id)
-	
+	def getName(self, source, id):
+		(name, ) = self.select("name FROM %s WHERE id = %s" % (source, id)).next()
+		return name
+
 	def albumsByArtist(self, id):
 		return self.select("DISTINCT album.id, album.name FROM album, tags WHERE tags.artist = %s AND album.id = tags.album ORDER BY album.name"
 				   % id)

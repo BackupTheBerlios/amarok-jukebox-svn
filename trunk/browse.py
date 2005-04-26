@@ -15,7 +15,9 @@ def artistsHtml(c):
     return s
 
 def albumsByArtistHtml(c, id):
-    s = "<form action='playlist' method='post'>"
+    s = "<p><a href='browse?artists=1'>Up to list of artists</a></p>"
+    s += "<h1>Albums by %s</h1>" % c.getName('artist', id).encode('utf-8')
+    s += "<form action='playlist' method='post'>"
     s += "<ul>"
     for id, name in c.albumsByArtist(id):
         s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s\">%s</a></li>" % (id, id , cgi.escape(name.encode('utf-8')))
@@ -25,7 +27,8 @@ def albumsByArtistHtml(c, id):
     return s
 
 def songsByAlbumHtml(c, id):
-    s = "<form action='playlist#playing' method='post'>"
+    s = "<h1>Albums by %s</h1>" % c.getName('album', id).encode('utf-8')
+    s += "<form action='playlist#playing' method='post'>"
     s += "<ol>"
     for url, title in c.songsByAlbum(id):
         s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a></li>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
