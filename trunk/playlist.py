@@ -63,4 +63,4 @@ def serve(request):
     doc += playlistToHtml(f, p)
     doc += CGI.htmlTail()
 
-    return doc
+    request.serve_string(doc)

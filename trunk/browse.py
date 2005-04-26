@@ -5,7 +5,7 @@ import urllib
 from Collection import Collection
 
 def artistsHtml(c):
-    s += "<h1>List of artists in collection</h1>"
+    s = "<h1>List of artists in collection</h1>"
     s += "<ul id='list'>"
     for id, name in c.artists():
         n = cgi.escape(name.encode('utf-8'))
@@ -46,9 +46,9 @@ def songsByAlbumHtml(c, album, artist):
 
 def serveCover(request, c, cover):
     if c.isCover(cover):
-        f = open(cover, 'r')
-        request.copyfile(f, request.wfile)
-    # FIXME: else 404
+        request.send_root_file(cover)
+    else:
+        request.send_error(404, "Cover not found")
 
 def serve(request):
     
@@ -56,7 +56,6 @@ def serve(request):
     qp = request.queryParams()
 
     if qp.has_key('cover'):
-        request.wfile.write(CGI.httpHeaders('image/jpeg'))
         serveCover(request, c, qp['cover'][0])
         return ''
 
@@ -69,8 +68,6 @@ def serve(request):
     elif qp.has_key('album'):
         doc += songsByAlbumHtml(c, qp['album'][0], qp['from'][0])
     else:
-        # FIXME: This should be a 404
-        doc += "Wrong URL!"
-        doc += CGI.htmlTail()
+        request.send_error(406, "What do you want to browse?")
 
-    return doc
+    request.serve_string(doc)

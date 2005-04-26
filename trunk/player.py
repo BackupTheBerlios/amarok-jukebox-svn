@@ -57,4 +57,4 @@ def serve(request):
 
     doc += CGI.htmlTail()
 
-    return doc
+    request.serve_string(doc)

@@ -70,10 +70,8 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         if urls.has_key(key):
             if self.command == 'POST':
                 self.__getFormFields()
-            self.send_response(200)
             try:
-                response = urls[key].serve(self)
-                self.wfile.write(response)
+                urls[key].serve(self)
             except:
                 h.handle((sys.exc_type, sys.exc_value, sys.exc_traceback))
         else:
@@ -90,6 +88,27 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             self.__do_internal()
         else:
             CGIHTTPRequestHandler.do_POST(self);
+
+    def serve_string(self, s):
+        self.send_response(200)
+        self.wfile.write(s)
+
+    def send_root_file(self, path):
+        ctype = self.guess_type(path)
+        if ctype.startswith('text/'):
+            mode = 'r'
+        else:
+            mode = 'rb'
+        try:
+            f = open(path, mode)
+        except IOError:
+            self.send_error(404, "File not found")
+        self.send_response(200)
+        self.send_header("Content-type", ctype)
+        self.send_header("Content-Length", str(os.fstat(f.fileno())[6]))
+        self.end_headers()
+        self.copyfile(f, self.wfile)
+        f.close()
 
 class HttpServer:
 
