@@ -77,11 +77,7 @@ def songHtml(c, song, level = 1, cover = True):
     s += "<dd>%s</dd>" % d['bitrate']
     s += "</dl>"
     s += "<form action='playlist#playing' method='post'>"
-    # FIXME
-    try:
-        s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song.encode('utf-8'))
-    except UnicodeDecodeError:
-        s += "<p>Sorry, encoding bug</p>"
+    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song)
     s += "<input type='submit' name='addSongs' value='Queue song' />"
     s += "</form>"
     return s
