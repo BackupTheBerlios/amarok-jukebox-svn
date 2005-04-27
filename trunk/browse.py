@@ -71,6 +71,10 @@ def songHtml(c, song):
     s += "<dt>Bitrate</dt>"
     s += "<dd>%s</dd>" % d['bitrate']
     s += "</dl>"
+    s += "<form action='playlist#playing' method='post'>"
+    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song.encode('utf-8'))
+    s += "<input type='submit' name='addSongs' value='Queue song' />"
+    s += "</form>"
     return s
 
 def serveCover(request, c, cover):
