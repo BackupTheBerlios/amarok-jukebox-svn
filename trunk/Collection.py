@@ -37,6 +37,9 @@ class Collection:
 		return self.__checkCount('tags', 'url', url)
 
 	def isCover(self, url):
+		# FIXME: special hack for covers under .kde
+		if url.startswith(os.getenv('HOME')+'/.kde/share/apps/amarok/albumcovers/'):
+			return True
 		return self.__checkCount('images', 'path', url)
 
 	def __checkCount(self, table, field, value):
@@ -68,7 +71,7 @@ class Collection:
 			result['track'] = track
 			result['bitrate'] = bitrate
 			length = int(length)
-			result['length'] = "%d\"%02d" % (length / 60, length % 60)
+			result['length'] = "%d:%02d" % (length / 60, length % 60)
 			result['samplerate'] = samplerate
 		except:
 			return None

@@ -1,6 +1,7 @@
 import Dcop
 from Collection import Collection
 import Debug
+import urllib
 
 class Player:
 
@@ -48,3 +49,9 @@ class Player:
         if c is None:
             c = Collection()
         self.playMedia(c.randomSong())
+
+    def currentCover(self):
+        return Dcop.call("player coverImage")
+
+    def currentSong(self):
+        return urllib.unquote(Dcop.call("player encodedURL"))[5:]

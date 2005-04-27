@@ -3,6 +3,7 @@ import CGI
 import urllib
 
 from Collection import Collection
+from Player import Player
 
 def artistsHtml(c):
     s = "<h1>List of artists in collection</h1>"
@@ -46,17 +47,21 @@ def songsByAlbumHtml(c, album, artist):
     s += "</form>"
     return s
 
+def albumCoverMarkup(s):
+    return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(s.encode('utf-8'))
+
 def albumCoverP(c, artist, album):
     cover = c.albumCover(artist, album)
     if cover is not None:
-        return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(cover.encode('utf-8'))
+        return albumCoverMarkup(cover)
     else:
         return ""
 
-def songHtml(c, song):
+def songHtml(c, song, level = 1, cover = True):
     d = c.songDetails(song)
-    s = "<h1>%s</h1>" % d['title']
-    s += albumCoverP(c, d['artist'], d['album'])
+    s = "<h%d>%s</h%d>" % (level, d['title'], level)
+    if cover:
+        s += albumCoverP(c, d['artist'], d['album'])
     s += "<dl>"
     s += "<dt>Artist</dt>"
     s += "<dd>%s</dd>" % d['artist']
@@ -82,6 +87,17 @@ def serveCover(request, c, cover):
         request.send_root_file(cover)
     else:
         request.send_error(404, "Cover not found")
+
+def currentlyPlaying():
+    p = Player()
+    p.updateStatus()
+    if p.status() == p.Stopped:
+        return "<p><em>Nothing</em></p>"
+    s = albumCoverMarkup(p.currentCover())
+    song = p.currentSong()
+    c = Collection()
+    s += songHtml(c, song, level = 2, cover = False)
+    return s
 
 def serve(request):
     

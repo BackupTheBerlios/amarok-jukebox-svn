@@ -3,6 +3,7 @@ import CGI
 
 from Player import Player
 from Playlist import Playlist
+import browse
 
 def showActions(a):
     s = "<form action='player' method='post'>"
@@ -51,8 +52,12 @@ def serve(request):
                 p = Player()
                 definedActions[action]['action'](p, request)
             else:
-                doc += "Error!"
+                request.send_error(406, "Unknown action")
 
+    doc += "<h1>Now playing</h1>"
+    doc += browse.currentlyPlaying()
+
+    doc += "<h1>Player controls</h1>"
     doc += showActions(definedActions)
 
     doc += CGI.htmlTail()
