@@ -100,5 +100,6 @@ def serve(request):
         doc += songHtml(c, qp['song'][0])
     else:
         request.send_error(406, "What do you want to browse?")
+    doc += CGI.htmlTail()
 
     request.serve_string(doc)

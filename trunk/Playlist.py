@@ -1,6 +1,7 @@
 import os
 
 import Dcop
+import Debug
 
 class Playlist:
 
@@ -14,6 +15,7 @@ class Playlist:
         return self.index() >= 0
 
     def __add(self, url):
+        Debug.log("Queuing " + url)
         Dcop.call("playlist addMedia \"%s\"" % url)
 
     def add(self, c, url):
@@ -32,6 +34,3 @@ class Playlist:
 
     def clear(self):
         Dcop.call("playlist clearPlaylist")
-
-#    def index(self):
-#        return os.popen("dcop amarok playlist getActiveIndex" % url)

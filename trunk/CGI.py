@@ -19,7 +19,9 @@ def htmlHead(params = { }):
     return h
 
 def htmlTail():
-    h = "<hr /><addressing><a href='..'>Home</a></address>"
+    h = "<hr />"
+    h += "<p><a href='player'>Controls</a></p>"
+    h += "<address><a href='..'>Home</a></address>"
     h += "</body>"
     h += "</html>"
     return h

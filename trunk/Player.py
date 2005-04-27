@@ -1,5 +1,6 @@
 import Dcop
 from Collection import Collection
+import Debug
 
 class Player:
 
@@ -40,6 +41,7 @@ class Player:
         Dcop.call("player next")
 
     def playMedia(self, url):
+        Debug.log("Playing " + url)
         Dcop.call("playlist playMedia \"%s\"" % url.encode('utf-8'))
 
     def playRandom(self, c = None):

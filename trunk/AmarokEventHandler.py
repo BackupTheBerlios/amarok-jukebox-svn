@@ -1,6 +1,7 @@
 import sys
 import select
 import os
+import Debug
 
 from Player import Player
 from Playlist import Playlist
@@ -26,13 +27,11 @@ class AmarokEventHandler:
         self.__running = False
 
     def __dispatch(self, s):
+        Debug.log("Event received: " + s)
         if s.find("engineStateChange: empty" ) >= 0:
             if self.__state.isRunning():
-                sys.stderr.write("Unknown notification: " + s + " -> ignoring\n")
                 self.__player.playRandom()
         elif s.find("trackChange" ) >= 0:
             pl = Playlist()
             if not pl.isPlaying():
                 self.__player.playRandom()                
-        else:
-            sys.stderr.write("Unknown notification: " + s + " -> ignoring\n")
