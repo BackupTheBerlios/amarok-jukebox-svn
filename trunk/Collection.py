@@ -51,7 +51,7 @@ class Collection:
 		# FIXME: This doesn't catch all covers; it seems that there are others
 		# in .kde/share/apps/amarok that do not appear in the database
 		r = self.select("path FROM images WHERE artist = \"%s\" AND album = \"%s\""
-				% (artist, album))
+				% (artist.decode('utf-8'), album.decode('utf-8')))
 		try:
 			(url, ) =  r.next()
 			return url
