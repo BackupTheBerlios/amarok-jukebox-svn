@@ -31,8 +31,12 @@ class AmarokEventHandler:
     def __dispatch(self, s):
         Debug.log("Event received: " + s)
         if s.find("engineStateChange: empty" ) >= 0:
+            Debug.log("Playlist is empty!")
             if self.__state.isRunning():
+                Debug.log("Queuing random song")
                 self.__player.playRandom()
+            else:
+                Debug.log("Not running")
         elif s.find("trackChange" ) >= 0:
             pl = Playlist()
             if not pl.isPlaying():
