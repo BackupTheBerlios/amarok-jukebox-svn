@@ -74,6 +74,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
                 urls[key].serve(self)
             except:
                 h.handle((sys.exc_type, sys.exc_value, sys.exc_traceback))
+                self.wfile.write("<h1>Please report this bug</h1><p>Please <a href='http://developer.berlios.de/bugs/?group_id=3555'>report a bug using the Web interface</a>. Thank you!</p></body></html>")
         else:
             self.send_response(404)
 
