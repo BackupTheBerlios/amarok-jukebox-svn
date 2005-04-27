@@ -61,7 +61,7 @@ class Collection:
 	def songDetails(self, song):
 		result = {}
 		try:
-			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.select("artist.name, album.name, tags.genre, tags.title, year.name, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id" % song).next()
+			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.select("artist.name, album.name, genre.name, tags.title, year.name, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song).next()
 			result['artist'] = artist
 			result['album'] = album
 			result['genre'] = genre
