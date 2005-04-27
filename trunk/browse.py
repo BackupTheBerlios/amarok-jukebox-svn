@@ -64,9 +64,9 @@ def songHtml(c, song, level = 1, cover = True):
         s += albumCoverP(c, d['artist'], d['album'])
     s += "<dl>"
     s += "<dt>Artist</dt>"
-    s += "<dd>%s</dd>" % d['artist'].encode('utf-8')
+    s += "<dd>%s</dd>" % d['artist']
     s += "<dt>Album</dt>"
-    s += "<dd>%s</dd>" % d['album'].encode('utf-8')
+    s += "<dd>%s</dd>" % d['album']
     s += "<dt>Length</dt>"
     s += "<dd>%s</dd>" % d['length']
     s += "<dt>Year</dt>"
@@ -77,10 +77,10 @@ def songHtml(c, song, level = 1, cover = True):
     s += "<dd>%s</dd>" % d['bitrate']
     s += "</dl>"
     s += "<form action='playlist#playing' method='post'>"
-    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song)
+    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song.decode('utf-8'))
     s += "<input type='submit' name='addSongs' value='Queue song' />"
     s += "</form>"
-    return s
+    return s.encode('utf-8')
 
 def serveCover(request, c, cover):
     if c.isCover(cover):
