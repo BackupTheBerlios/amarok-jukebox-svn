@@ -50,8 +50,12 @@ class Collection:
 	def albumCover(self, artist, album):
 		# FIXME: This doesn't catch all covers; it seems that there are others
 		# in .kde/share/apps/amarok that do not appear in the database
+		if type(artist) == str:
+			artist = artist.decode('utf-8')
+		if type(album) == str:
+			album = album.decode('utf-8')
 		r = self.select("path FROM images WHERE artist = \"%s\" AND album = \"%s\""
-				% (artist.decode('utf-8'), album.decode('utf-8')))
+				% (artist, album))
 		try:
 			(url, ) =  r.next()
 			return url
@@ -61,7 +65,7 @@ class Collection:
 	def songDetails(self, song):
 		result = {}
 		try:
-			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.select("artist.name, album.name, genre.name, tags.title, year.name, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song).next()
+			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.select("artist.name, album.name, genre.name, tags.title, year.name, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song.decode('utf-8')).next()
 			result['artist'] = artist
 			result['album'] = album
 			result['genre'] = genre
