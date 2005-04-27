@@ -5,6 +5,7 @@ import Debug
 
 from Player import Player
 from Playlist import Playlist
+import Dcop
 
 class AmarokEventHandler:
 
@@ -12,6 +13,7 @@ class AmarokEventHandler:
         self.__running = True;
         self.__player = Player()
         self.__state = state
+        Dcop.call("player enableRandomMode false")
 
     def start(self):
         while self.__running:
