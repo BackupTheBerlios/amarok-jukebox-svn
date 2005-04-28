@@ -8,5 +8,5 @@ def log(s):
     f = open(logfile, 'a')
     if f == None:
         return
-    f.write("[%s] %s\n" % (datetime.datetime.now(), s.encode('utf-8')))
+    f.write("[%s] %s\n" % (datetime.datetime.now(), s))
     f.close()

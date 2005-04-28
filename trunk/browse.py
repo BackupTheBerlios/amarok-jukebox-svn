@@ -9,7 +9,7 @@ def artistsHtml(c):
     s = "<h1>List of artists in collection</h1>"
     s += "<ul id='list'>"
     for id, name in c.artists():
-        n = cgi.escape(name.encode('utf-8'))
+        n = cgi.escape(name)
         if n == "":
             n = "<em>Unknown</em>"
         s += "<li><a href=\"browse?artist=%s\">%s</a></li>" % (id , n)
@@ -18,29 +18,30 @@ def artistsHtml(c):
 
 def albumsByArtistHtml(c, id):
     s = "<p><a href='browse?artists=1'>Up to list of artists</a></p>"
-    s += "<h1>Albums by %s</h1>" % c.getName('artist', id).encode('utf-8')
+    s += "<h1>Albums by %s</h1>" % c.getName('artist', id)
     s += "<form action='playlist' method='post'>"
     s += "<ul id='list'>"
     for ai, name in c.albumsByArtist(id):
-        s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s&amp;from=%s\">%s</a></li>" % (ai, ai, id, cgi.escape(name.encode('utf-8')))
+        s += "<li><input type='checkbox' name='album' value=\"%s\" /> <a href=\"browse?album=%s&amp;from=%s\">%s</a></li>" % (ai, ai, id, cgi.escape(name))
     s += "</ul>"
     s += "<input type='submit' name='addAlbums' value='Queue selected entire albums' />"
     s += "</form>"
     return s
 
 def songsByAlbumHtml(c, album, artist):
-    artistName = c.getName('artist', artist).encode('utf-8')
-    albumName = c.getName('album', album).encode('utf-8')
+    artistName = c.getName('artist', artist)
+    albumName = c.getName('album', album)
     s = "<p><a href='browse?artist=%s'>Up to list of albums by %s</a></p>" % (artist, artistName)
     s += "<h1>Tracks on %s by %s</h1>" % (albumName, artistName)
     s += albumCoverP(c, artistName, albumName)
     s += "<form action='playlist#playing' method='post'>"
     s += "<ol id='list'>"
     for url, title in c.songsByAlbum(album):
-        s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url.encode('utf-8')), urllib.quote(url.encode('utf-8')), cgi.escape(title.encode('utf-8')))
-        coll = Collection()
-        d = coll.songDetails(url.encode('utf-8'))
-        s += " (%s)" % d['length']
+        s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url), urllib.quote(url), cgi.escape(title))
+        # FIXME
+        #coll = Collection()
+        #d = coll.songDetails(url)
+        #s += " (%s)" % d['length']
         s += "</li>"
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
@@ -48,7 +49,7 @@ def songsByAlbumHtml(c, album, artist):
     return s
 
 def albumCoverMarkup(s):
-    return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(s.encode('utf-8'))
+    return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(s)
 
 def albumCoverP(c, artist, album):
     cover = c.albumCover(artist, album)
@@ -77,10 +78,10 @@ def songHtml(c, song, level = 1, cover = True):
     s += "<dd>%s</dd>" % d['bitrate']
     s += "</dl>"
     s += "<form action='playlist#playing' method='post'>"
-    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song.decode('utf-8'))
+    s += "<input type='hidden' name='song' value=\"%s\" />" % cgi.escape(song)
     s += "<input type='submit' name='addSongs' value='Queue song' />"
     s += "</form>"
-    return s.encode('utf-8')
+    return s
 
 def serveCover(request, c, cover):
     if c.isCover(cover):

@@ -21,7 +21,7 @@ class Playlist:
     def add(self, c, url):
         if (c.inCollection(url)):
             self.__add(url)
-            return [ c.getSongTitle(url) ]
+            return [ c.songTitle(url) ]
         else:
             return [ ]
 
@@ -30,7 +30,7 @@ class Playlist:
         for url, title in c.songsByAlbum(id):
             self.__add(url)
             r += [ url ]
-        return map(c.getSongTitle, r)
+        return map(c.songTitle, r)
 
     def clear(self):
         Dcop.call("playlist clearPlaylist")
