@@ -1,26 +1,25 @@
 import os
-import Dcop
+import os.path
 import random
+import md5
 
+import Dcop
 import Debug
 
 class Collection:
 
+	__coverHome = os.getenv('HOME')+'/.kde/share/apps/amarok/albumcovers/'
+
         def __select(self, query):
 		r = Dcop.call("collection query \"SELECT %s\"" % query.replace('"', '\\"'))
-		print r
 		r = r.split("\n")
-		print r
 		nargs = len(query.split("FROM")[0].split(","))
-		print nargs
 		self.__results = [ ]
 		while len(r) > 0:
 			a = [ ]
 			for i in range(nargs):
 				a.append(r.pop(0))
-				print a
 			self.__results.append(a)
-		print self.__results
 
 	def __fetchone(self):
 		return self.__results.pop(0)
@@ -58,8 +57,7 @@ class Collection:
 		return self.__checkCount('tags', 'url', url)
 
 	def isCover(self, url):
-		# FIXME: special hack for covers under .kde
-		if url.startswith(os.getenv('HOME')+'/.kde/share/apps/amarok/albumcovers/'):
+		if url.startswith(self.__coverHome):
 			return True
 		return self.__checkCount('images', 'path', url)
 
@@ -70,15 +68,21 @@ class Collection:
 		return (count > 0)
 
 	def albumCover(self, artist, album):
-		# FIXME: This doesn't catch all covers; it seems that there are others
-		# in .kde/share/apps/amarok that do not appear in the database
 		self.__select("path FROM images WHERE artist = \"%s\" AND album = \"%s\""
 			    % (artist, album))
 		try:
 			(url, ) =  self.__fetchone()
-			return url
+			if url == "":
+				raise Exception
 		except:
-			return None
+			d = md5.new()
+			d.update(artist.lower())
+			d.update(album.lower())
+			url = self.__coverHome + 'large/' + d.hexdigest()
+			print url
+			if not os.path.isfile(url):
+				return None
+		return url
 
 	def songDetails(self, song):
 		result = {}

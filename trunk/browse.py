@@ -38,10 +38,9 @@ def songsByAlbumHtml(c, album, artist):
     s += "<ol id='list'>"
     for url, title in c.songsByAlbum(album):
         s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url), urllib.quote(url), cgi.escape(title))
-        # FIXME
-        #coll = Collection()
-        #d = coll.songDetails(url)
-        #s += " (%s)" % d['length']
+        coll = Collection()
+        d = coll.songDetails(url)
+        s += " (%s)" % d['length']
         s += "</li>"
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
@@ -49,7 +48,7 @@ def songsByAlbumHtml(c, album, artist):
     return s
 
 def albumCoverMarkup(s):
-    return "<p class='cover'><img id='cover' src='browse?cover=%s'/></p>" % cgi.escape(s)
+    return "<p class='cover'><img id='cover' height='150' src='browse?cover=%s'/></p>" % cgi.escape(s)
 
 def albumCoverP(c, artist, album):
     cover = c.albumCover(artist, album)
