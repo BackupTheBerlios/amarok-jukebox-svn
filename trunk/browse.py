@@ -76,6 +76,9 @@ def albumCoverP(c, artist, album):
 
 def songHtml(c, song, level = 1, cover = True):
     d = c.songDetails(song)
+    # FIXME
+    if d is None:
+        return "<p>Sorry, you've been struck by <a href='http://bugs.kde.org/show_bug.cgi?id=104769'>amaroK bug #104769</a>.</p>"
     s = "<h%d>%s</h%d>" % (level, d['title'], level)
     if cover:
         s += albumCoverP(c, d['artist'], d['album'])
