@@ -41,7 +41,9 @@ def songsByAlbumHtml(c, album, artist):
         s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url), urllib.quote(url), cgi.escape(title))
         coll = Collection()
         d = coll.songDetails(url)
-        s += " (%s)" % d['length']
+        # FIXME: this is because of http://bugs.kde.org/show_bug.cgi?id=104769
+        if d is not None:
+            s += " (%s)" % d['length']
         s += "</li>"
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
