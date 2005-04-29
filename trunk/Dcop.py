@@ -8,7 +8,7 @@ class Error(Exception):
 def call(call):
     Debug.log("DCOP call: " + call)
     f = os.popen("dcop amarok %s" % call)
-    result = f.readline()
+    result = f.read()
     if f.close() is not None:
         raise Error
     result = result.strip()

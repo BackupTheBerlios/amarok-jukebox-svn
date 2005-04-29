@@ -1,22 +1,34 @@
 import os
-import sqlite
+import Dcop
 import random
 
 import Debug
 
 class Collection:
-        def __init__(self):
-                self.__cx = sqlite.connect(os.getenv('HOME')+'/.kde/share/apps/amarok/collection.db', encoding='utf-8')
-		self.__cu = self.__cx.cursor()
 
         def __select(self, query):
-		self.__cu.execute("SELECT %s" % query)
+		r = Dcop.call("collection query \"SELECT %s\"" % query.replace('"', '\\"'))
+		print r
+		r = r.split("\n")
+		print r
+		nargs = len(query.split("FROM")[0].split(","))
+		print nargs
+		self.__results = [ ]
+		while len(r) > 0:
+			a = [ ]
+			for i in range(nargs):
+				a.append(r.pop(0))
+				print a
+			self.__results.append(a)
+		print self.__results
 
 	def __fetchone(self):
-		return self.__cu.fetchone()
+		return self.__results.pop(0)
 
 	def __fetchall(self):
-		return self.__cu.fetchall()
+		r = self.__results
+		self.__results = [ ]
+		return r
 
 	def artists(self, filter = '%'):
 		self.__select("id, name FROM artist WHERE name LIKE '%s' ORDER BY name"
@@ -71,14 +83,13 @@ class Collection:
 	def songDetails(self, song):
 		result = {}
 		try:
-			self.__select("artist.name, album.name, genre.name, tags.title, year.name, tags.comment, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song)
-			(artist, album, genre, title, year, comment, track, bitrate, length, samplerate) = self.__fetchone()
+			self.__select("artist.name, album.name, genre.name, tags.title, year.name, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song)
+			(artist, album, genre, title, year, track, bitrate, length, samplerate) = self.__fetchone()
 			result['artist'] = artist
 			result['album'] = album
 			result['genre'] = genre
 			result['title'] = title
 			result['year'] = year
-			result['comment'] = comment
 			result['track'] = track
 			result['bitrate'] = bitrate
 			length = int(length)
