@@ -76,6 +76,8 @@ class Collection:
 				raise Exception
 		except:
 			d = md5.new()
+			# FIXME: this only seems to work on ASCII
+			# Original code uses: artist.lower().local8Bit()
 			d.update(artist.lower())
 			d.update(album.lower())
 			url = self.__coverHome + 'large/' + d.hexdigest()

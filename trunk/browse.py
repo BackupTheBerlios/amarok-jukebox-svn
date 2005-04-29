@@ -2,6 +2,7 @@ import cgi
 import CGI
 import urllib
 
+import Debug
 from Collection import Collection
 from Player import Player
 
@@ -48,7 +49,21 @@ def songsByAlbumHtml(c, album, artist):
     return s
 
 def albumCoverMarkup(s):
-    return "<p class='cover'><img id='cover' height='150' src='browse?cover=%s'/></p>" % cgi.escape(s)
+    try:
+        import Image
+        try:
+            im = Image.open(s)
+        except IOError:
+            return "<!-- No cover found -->"
+        height, width = im.size
+        if (height > 150):
+            height = "height='150'"
+        else:
+            height = ""
+    except:
+        Debug.log("WARNING: install PIL")
+        height = "height='150'"
+    return "<p class='cover'><img id='cover' %s src='browse?cover=%s'/></p>" % (height, cgi.escape(s))
 
 def albumCoverP(c, artist, album):
     cover = c.albumCover(artist, album)
