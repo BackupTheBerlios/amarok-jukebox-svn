@@ -1,6 +1,7 @@
 import cgi
-import CGI
+import time
 
+import CGI
 from Player import Player
 from Playlist import Playlist
 import browse
@@ -51,6 +52,7 @@ def serve(request):
             if definedActions.has_key(action):
                 p = Player()
                 definedActions[action]['action'](p, request)
+                time.sleep(1)
             else:
                 request.send_error(406, "Unknown action")
 
