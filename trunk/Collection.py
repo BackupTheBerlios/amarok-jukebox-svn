@@ -108,7 +108,7 @@ class Collection:
 	def randomSong(self):
 		self.__select("count(*) FROM tags")
 		(count, ) = self.__fetchone()
-		self.__select("url FROM tags LIMIT 1 OFFSET %s" % random.randint(0, count-1))
+		self.__select("url FROM tags LIMIT 1 OFFSET %s" % random.randint(0, int(count)-1))
 		(url, ) = self.__fetchone()
 		Debug.log("Random song: " + url)
 		return url
