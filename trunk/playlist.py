@@ -16,13 +16,13 @@ def makeList(a):
 def printSong(s):
     return "<p>Added <q>" + s + "</q></p>"
 
-def addSong(p, c, e):
-    [ s ] = p.add(c, e)
+def addSong(p, e):
+    [ s ] = p.add(e)
     return printSong(s)
 
-def addAlbum(p, c, e):
+def addAlbum(p, e):
     r = ""
-    for s in p.addAlbum(c, int(e)):
+    for s in p.addAlbum(int(e)):
         r += printSong(s)
     return r
 
@@ -35,7 +35,6 @@ def playlistToHtml(s, p):
 
 def serve(request):
 
-    c = Collection()
     p = Playlist()
     player = Player()
 
@@ -47,11 +46,11 @@ def serve(request):
         if form.has_key('addSongs'):
             for e in makeList(form.getvalue('song')):
                 if e is not None:
-                    doc += addSong(p, c, e)
+                    doc += addSong(p, e)
         elif form.has_key('addAlbums'):
             for e in makeList(form.getvalue('album')):
                 if e is not None:
-                    doc += addAlbum(p, c, e)
+                    doc += addAlbum(p, e)
         elif form.has_key('clear'):
             p.clear()
         elif form.has_key('clearAndStop'):

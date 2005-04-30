@@ -51,7 +51,11 @@ class Collection:
 
 	def songTitle(self, url):
 		d = self.songDetails(url)
-		return d['title']
+		# FIXME: amaroK bug #104769
+		if d is None:
+			return url
+		else:
+			return d['title']
 
 	def inCollection(self, url):
 		return self.__checkCount('tags', 'url', url)

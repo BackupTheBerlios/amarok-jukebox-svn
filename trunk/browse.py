@@ -6,7 +6,8 @@ import Debug
 from Collection import Collection
 from Player import Player
 
-def artistsHtml(c):
+def artistsHtml():
+    c = Collection()
     s = "<h1>List of artists in collection</h1>"
     s += "<ul id='list'>"
     for id, name in c.artists():
@@ -17,7 +18,8 @@ def artistsHtml(c):
     s += "</ul>"
     return s
 
-def albumsByArtistHtml(c, id):
+def albumsByArtistHtml(id):
+    c = Collection()
     s = "<p><a href='browse?artists=1'>Up to list of artists</a></p>"
     s += "<h1>Albums by %s</h1>" % c.getName('artist', id)
     s += "<form action='playlist' method='post'>"
@@ -29,12 +31,13 @@ def albumsByArtistHtml(c, id):
     s += "</form>"
     return s
 
-def songsByAlbumHtml(c, album, artist):
+def songsByAlbumHtml(album, artist):
+    c = Collection()
     artistName = c.getName('artist', artist)
     albumName = c.getName('album', album)
     s = "<p><a href='browse?artist=%s'>Up to list of albums by %s</a></p>" % (artist, artistName)
     s += "<h1>Tracks on %s by %s</h1>" % (albumName, artistName)
-    s += albumCoverP(c, artistName, albumName)
+    s += albumCoverP(artistName, albumName)
     s += "<form action='playlist#playing' method='post'>"
     s += "<ol id='list'>"
     for url, title in c.songsByAlbum(album):
@@ -67,21 +70,23 @@ def albumCoverMarkup(s):
         height = "height='150'"
     return "<p class='cover'><img id='cover' %s src='browse?cover=%s'/></p>" % (height, cgi.escape(s))
 
-def albumCoverP(c, artist, album):
+def albumCoverP(artist, album):
+    c = Collection()
     cover = c.albumCover(artist, album)
     if cover is not None:
         return albumCoverMarkup(cover)
     else:
         return ""
 
-def songHtml(c, song, level = 1, cover = True):
+def songHtml(song, level = 1, cover = True):
+    c = Collection()
     d = c.songDetails(song)
     # FIXME
     if d is None:
         return "<p>Sorry, you've been struck by <a href='http://bugs.kde.org/show_bug.cgi?id=104769'>amaroK bug #104769</a>.</p>"
     s = "<h%d>%s</h%d>" % (level, d['title'], level)
     if cover:
-        s += albumCoverP(c, d['artist'], d['album'])
+        s += albumCoverP(d['artist'], d['album'])
     s += "<dl>"
     s += "<dt>Artist</dt>"
     s += "<dd>%s</dd>" % d['artist']
@@ -102,7 +107,8 @@ def songHtml(c, song, level = 1, cover = True):
     s += "</form>"
     return s
 
-def serveCover(request, c, cover):
+def serveCover(request, cover):
+    c = Collection()
     if c.isCover(cover):
         request.send_root_file(cover)
     else:
@@ -116,12 +122,11 @@ def currentlyPlaying():
     s = albumCoverMarkup(p.currentCover())
     song = p.currentSong()
     c = Collection()
-    s += songHtml(c, song, level = 2, cover = False)
+    s += songHtml(song, level = 2, cover = False)
     return s
 
 def serve(request):
     
-    c = Collection()
     qp = request.queryParams()
 
     if qp.has_key('cover'):
@@ -131,13 +136,13 @@ def serve(request):
     doc = CGI.httpHeaders()
     doc += CGI.htmlHead()
     if qp.has_key('artists'):
-        doc += artistsHtml(c)
+        doc += artistsHtml()
     elif qp.has_key('artist'):
-        doc += albumsByArtistHtml(c, qp['artist'][0])
+        doc += albumsByArtistHtml(qp['artist'][0])
     elif qp.has_key('album'):
-        doc += songsByAlbumHtml(c, qp['album'][0], qp['from'][0])
+        doc += songsByAlbumHtml(qp['album'][0], qp['from'][0])
     elif qp.has_key('song'):
-        doc += songHtml(c, qp['song'][0])
+        doc += songHtml(qp['song'][0])
     else:
         request.send_error(406, "What do you want to browse?")
     doc += CGI.htmlTail()

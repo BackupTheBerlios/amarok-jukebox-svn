@@ -57,9 +57,8 @@ class Player:
                 Debug.log("ERROR: Huh, something went wrong; trying to queue the song again")
             
 
-    def playRandom(self, c = None):
-        if c is None:
-            c = Collection()
+    def playRandom(self):
+        c = Collection()
         self.playMedia(c.randomSong())
 
     def currentCover(self):
