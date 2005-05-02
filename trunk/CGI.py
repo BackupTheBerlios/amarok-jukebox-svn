@@ -1,5 +1,7 @@
 import sys, os.path
 
+import Version
+
 def httpHeaders(type = "text/html; charset='utf-8'"):
     h = "Content-Type: %s\n" % type
     return h + "\n"
@@ -10,7 +12,7 @@ def htmlHead(params = { }):
 \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"""
     h += "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>"
     h += """<head>
-<title>amaroK juKebox</title>"""
+<title>amaroK juKebox """ + Version.Version + """</title>"""
     if params.has_key('style'):
         for s in params['style']:
             h += "<link rel='stylesheet' type='text/css' href='%s' />" % s
@@ -24,7 +26,7 @@ def htmlHead(params = { }):
 def htmlTail():
     h = "<hr />"
     h += "<p><a href='player'>Controls</a></p>"
-    h += "<address><a href='..'>Home</a></address>"
+    h += "<address><a href='..'>Home (amaroK juKebox " + Version.Version + ")</a></address>"
     h += "</body>"
     h += "</html>"
     return h

@@ -10,6 +10,7 @@ from CGIHTTPServer import CGIHTTPRequestHandler
 import browse
 import playlist
 import player
+import Version
 
 jukeboxState = None
 
@@ -64,6 +65,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
             'browse': browse,
             'player': player,
             'playlist': playlist,
+            'version': Version
         }
         p = self.__absPath()
         key = p[len(self.__internal_path):]
