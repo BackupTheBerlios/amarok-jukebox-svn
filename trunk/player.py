@@ -35,7 +35,7 @@ def next(p, request):
 
 def serve(request):
     doc = CGI.httpHeaders()
-    doc += CGI.htmlHead()
+    doc += CGI.htmlHead({ 'markup': [ '<meta http-equiv="Refresh" content="60"/>' ]})
 
     definedActions =  {
         'Play': { 'action': play },
@@ -58,6 +58,8 @@ def serve(request):
 
     doc += "<h1>Now playing</h1>"
     doc += browse.currentlyPlaying()
+
+    doc += "<p class='generated'>Status at " + time.ctime() + ".</p>"
 
     doc += "<h1>Player controls</h1>"
     doc += showActions(definedActions)

@@ -13,7 +13,10 @@ def htmlHead(params = { }):
 <title>amaroK juKebox</title>"""
     if params.has_key('style'):
         for s in params['style']:
-            h+= "<link rel='stylesheet' type='text/css' href='%s' />" % s
+            h += "<link rel='stylesheet' type='text/css' href='%s' />" % s
+    if params.has_key('markup'):
+        for s in params['markup']:
+            h += s
     h += "</head>"
     h += "<body>"
     return h
