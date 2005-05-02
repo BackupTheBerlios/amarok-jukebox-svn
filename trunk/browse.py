@@ -123,6 +123,8 @@ def currentlyPlaying():
     song = p.currentSong()
     c = Collection()
     s += songHtml(song, level = 2, cover = False)
+    remaining = p.trackTotalTime() -  p.trackCurrentTime()
+    s += "<p class='current'>Remaining: %s:%02d</p>" % (remaining / 60, remaining % 60)
     return s
 
 def serve(request):

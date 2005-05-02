@@ -66,3 +66,9 @@ class Player:
 
     def currentSong(self):
         return urllib.unquote(Dcop.call("player encodedURL"))[5:]
+
+    def trackCurrentTime(self):
+        return int(Dcop.call("player trackCurrentTime"))
+
+    def trackTotalTime(self):
+        return int(Dcop.call("player trackTotalTime"))
