@@ -130,7 +130,7 @@ def serve(request):
     qp = request.queryParams()
 
     if qp.has_key('cover'):
-        serveCover(request, c, qp['cover'][0])
+        serveCover(request, qp['cover'][0])
         return ''
 
     doc = CGI.httpHeaders()
