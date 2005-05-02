@@ -5,8 +5,8 @@ import datetime
 logfile = '/tmp/amarok-jukebox.log'
 
 def log(s):
-    # Disabled for release
-    return
+    ## Disabled for release
+    #return
     f = open(logfile, 'a')
     if f == None:
         return
