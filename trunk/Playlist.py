@@ -1,3 +1,4 @@
+import urllib
 import os
 
 import Dcop
@@ -22,7 +23,7 @@ class Playlist:
     def add(self, url):
         c = Collection()
         if (c.inCollection(url)):
-            self.__add(url)
+            self.__add(urllib.quote(url))
             return [ c.songTitle(url) ]
         else:
             return [ ]

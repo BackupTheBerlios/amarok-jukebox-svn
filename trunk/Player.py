@@ -48,7 +48,7 @@ class Player:
     def playMedia(self, url):
         Debug.log("Playing " + url)
         while True:
-            Dcop.call("playlist playMedia \"%s\"" % url)
+            Dcop.call("playlist playMedia \"%s\"" % urllib.quote(url))
             # FIXME: sometimes, the above doesn't work (why?)
             # Trying to fix it by checking that it got the order after the call was made
             time.sleep(2)
