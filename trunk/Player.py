@@ -3,6 +3,7 @@ import time
 
 import Dcop
 from Collection import Collection
+from Playlist import Playlist
 import Debug
 
 class Player:
@@ -58,6 +59,9 @@ class Player:
             
 
     def playRandom(self):
+        # FIXME: the history should be saved here
+        p = Playlist()
+        p.clear()
         c = Collection()
         self.playMedia(c.randomSong())
 
