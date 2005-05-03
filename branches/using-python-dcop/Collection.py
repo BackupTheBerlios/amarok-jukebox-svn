@@ -15,7 +15,10 @@ class Collection:
 		self.__dcop = self.__dcop.collection
 
         def __select(self, query):
-		r = self.__dcop.query("SELECT %s" % query)
+		query = "SELECT %s" % query
+		Debug.log("DCOP query: %s" % query)
+		r = self.__dcop.query(query)
+		Debug.log("DCOP results: %s" % r)
 		nargs = len(query.split("FROM")[0].split(","))
 		self.__results = [ ]
 		while len(r) > 0:

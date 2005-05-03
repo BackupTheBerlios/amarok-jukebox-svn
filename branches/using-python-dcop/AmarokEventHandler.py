@@ -39,4 +39,5 @@ class AmarokEventHandler:
                 Debug.log("Not running")
         elif s.find("trackChange" ) >= 0:
             if not self.__playlist.isPlaying():
-                self.__playlist.playRandom()                
+                Debug.log("Queuing random song")
+                self.__playlist.playRandom()
