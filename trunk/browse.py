@@ -44,7 +44,9 @@ def songsByAlbumHtml(album, artist):
         s += "<li><input type='checkbox' name='song' value=\"%s\" /> <a href=\"browse?song=%s\">%s</a>" % (cgi.escape(url), urllib.quote(url), cgi.escape(title))
         coll = Collection()
         d = coll.songDetails(url)
-        s += " (%s)" % d['length']
+        # FIXME: this is because of http://bugs.kde.org/show_bug.cgi?id=104769
+        if d is not None:
+            s += " (%s)" % d['length']
         s += "</li>"
     s += "</ol>"
     s += "<input type='submit' name='addSongs' value='Queue selected songs' />"
@@ -79,6 +81,9 @@ def albumCoverP(artist, album):
 def songHtml(song, level = 1, cover = True):
     c = Collection()
     d = c.songDetails(song)
+    # FIXME
+    if d is None:
+        return "<p>Sorry, you've been struck by <a href='http://bugs.kde.org/show_bug.cgi?id=104769'>amaroK bug #104769</a>.</p>"
     s = "<h%d>%s</h%d>" % (level, d['title'], level)
     if cover:
         s += albumCoverP(d['artist'], d['album'])

@@ -10,12 +10,9 @@ class Collection:
 
 	__coverHome = os.getenv('HOME')+'/.kde/share/apps/amarok/albumcovers/'
 
-	def __init__(self):
-		self.__dcop = Dcop.init()
-		self.__dcop = self.__dcop.collection
-
         def __select(self, query):
-		r = self.__dcop.query("SELECT %s" % query)
+		r = Dcop.call("collection query \"SELECT %s\"" % query.replace('"', '\\"'))
+		r = r.split("\n")
 		nargs = len(query.split("FROM")[0].split(","))
 		self.__results = [ ]
 		while len(r) > 0:
@@ -54,7 +51,11 @@ class Collection:
 
 	def songTitle(self, url):
 		d = self.songDetails(url)
-		return d['title']
+		# FIXME: amaroK bug #104769
+		if d is None:
+			return url
+		else:
+			return d['title']
 
 	def inCollection(self, url):
 		return self.__checkCount('tags', 'url', url)
@@ -91,18 +92,21 @@ class Collection:
 
 	def songDetails(self, song):
 		result = {}
-		self.__select("artist.name, album.name, genre.name, tags.title, year.name, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song)
-		(artist, album, genre, title, year, track, bitrate, length, samplerate) = self.__fetchone()
-		result['artist'] = artist
-		result['album'] = album
-		result['genre'] = genre
-		result['title'] = title
-		result['year'] = year
-		result['track'] = track
-		result['bitrate'] = bitrate
-		length = int(length)
-		result['length'] = "%d:%02d" % (length / 60, length % 60)
-		result['samplerate'] = samplerate
+		try:
+			self.__select("artist.name, album.name, genre.name, tags.title, year.name, tags.track, tags.bitrate, tags.length, tags.samplerate FROM tags, artist, album, year, genre WHERE url = \"%s\" AND tags.artist = artist.id AND tags.album = album.id AND tags.year = year.id AND tags.genre = genre.id" % song)
+			(artist, album, genre, title, year, track, bitrate, length, samplerate) = self.__fetchone()
+			result['artist'] = artist
+			result['album'] = album
+			result['genre'] = genre
+			result['title'] = title
+			result['year'] = year
+			result['track'] = track
+			result['bitrate'] = bitrate
+			length = int(length)
+			result['length'] = "%d:%02d" % (length / 60, length % 60)
+			result['samplerate'] = samplerate
+		except:
+			return None
 		return result
 
 	def randomSong(self):

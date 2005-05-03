@@ -3,6 +3,7 @@ import select
 import os
 import Debug
 
+from Player import Player
 from Playlist import Playlist
 import Dcop
 
@@ -10,10 +11,9 @@ class AmarokEventHandler:
 
     def __init__(self, state):
         self.__running = True;
-        self.__playlist = Playlist()
+        self.__player = Player()
         self.__state = state
-        dcop = Dcop.init()
-        dcop.player.enableRandomMode("false")
+        Dcop.call("player enableRandomMode false")
 
     def start(self):
         while self.__running:
@@ -34,9 +34,10 @@ class AmarokEventHandler:
             Debug.log("Playlist is empty!")
             if self.__state.isRunning():
                 Debug.log("Queuing random song")
-                self.__playlist.playRandom()
+                self.__player.playRandom()
             else:
                 Debug.log("Not running")
         elif s.find("trackChange" ) >= 0:
-            if not self.__playlist.isPlaying():
-                self.__playlist.playRandom()                
+            pl = Playlist()
+            if not pl.isPlaying():
+                self.__player.playRandom()                
