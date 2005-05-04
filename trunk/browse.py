@@ -110,7 +110,7 @@ def songHtml(song, level = 1, cover = True):
 def serveCover(request, cover):
     c = Collection()
     if c.isCover(cover):
-        request.send_root_file(cover, 600, "image/jpeg")
+        request.send_root_file(cover, 1800, "image/jpeg")
     else:
         request.send_error(404, "Cover not found")
 
