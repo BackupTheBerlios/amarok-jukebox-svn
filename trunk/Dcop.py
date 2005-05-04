@@ -1,4 +1,7 @@
 import os
+import pcop
+import pydcop
+
 import Debug
 
 class Error(Exception):
@@ -14,3 +17,6 @@ def call(call):
     result = result.strip()
     Debug.log("DCOP response: " + result)
     return result
+
+def init():
+    return pydcop.anyAppCalled("amarok")

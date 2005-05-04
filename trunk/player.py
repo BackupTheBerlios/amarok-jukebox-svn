@@ -18,7 +18,7 @@ def play(p, request):
     p.play()
     pl = Playlist()
     if not pl.isPlaying():
-        p.playRandom()
+        pl.playRandom()
 
 def stop(p, request):
     request.state.stop()

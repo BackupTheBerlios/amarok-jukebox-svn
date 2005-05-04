@@ -11,6 +11,11 @@ class Collection:
 	__coverHome = os.getenv('HOME')+'/.kde/share/apps/amarok/albumcovers/'
 
         def __select(self, query):
+		# FIXME: this needs to be converted to python-dcop, but I'm having some
+		# encoding problems: it seems that query with non-ASCII characters just
+		# don't work; see using-python-dcop branch
+		# This is bug #105084
+		# http://bugs.kde.org/show_bug.cgi?id=105084
 		r = Dcop.call("collection query \"SELECT %s\"" % query.replace('"', '\\"'))
 		r = r.split("\n")
 		nargs = len(query.split("FROM")[0].split(","))
