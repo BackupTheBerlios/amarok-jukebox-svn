@@ -96,7 +96,7 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         self.send_response(200)
         self.wfile.write(s)
 
-    def send_root_file(self, path):
+    def send_root_file(self, path, cache, default):
         ctype = self.guess_type(path)
         if ctype.startswith('text/'):
             mode = 'r'
@@ -107,8 +107,11 @@ class HttpRequestHandler(CGIHTTPRequestHandler):
         except IOError:
             self.send_error(404, "File not found")
         self.send_response(200)
+        if ctype == "application/octet-stream":
+            ctype = default
         self.send_header("Content-type", ctype)
         self.send_header("Content-Length", str(os.fstat(f.fileno())[6]))
+        self.send_header("Cache-Control", "max-age=%s" % cache)
         self.end_headers()
         self.copyfile(f, self.wfile)
         f.close()
