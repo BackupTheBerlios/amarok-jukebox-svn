@@ -1,0 +1,60 @@
+#!/usr/bin/python
+# Script to clean up duplicates and missing files in database (in particular, case is checked)
+
+import os
+import os.path
+
+cache = { }
+
+def checkPath(p, r = '/'):
+    if len(p) < 1:
+        return True
+    lookingFor = p.pop(0)
+    found = False
+    if cache.has_key(r):        
+        try:
+            cache[r].index(lookingFor)
+            found = True
+        except ValueError:
+            pass
+    if not found:
+        if not cache.has_key(r):
+            cache[r] = [ ]
+        for f in os.popen('ls "%s"' % r):
+            f = f.strip()
+            cache[r].append(f)
+            if f == lookingFor:
+                found = True
+    if not found:
+        return False
+    else:
+        return checkPath(p, r + lookingFor + '/')
+
+def checkFile(f):
+    if os.path.exists(f):
+        path = f.split('/')
+        if path[0] != "":
+            print "Relative path: skipping"
+            return True
+        else:
+            path.pop(0)
+            return checkPath(path)
+    else:
+        return False
+
+missing = [ ]
+print "Checking..."
+for f in os.popen("dcop amarok collection query 'SELECT url FROM tags'"):
+    f = f.strip()
+    if not checkFile(f):
+        missing.append(f)
+
+print "Deleting..."
+print missing
+a = raw_input("Confirm? ")
+if a != 'y':
+    exit
+for f in missing:
+    command = 'dcop amarok collection query "DELETE FROM tags WHERE url = \\\"%s\\\""' % f
+    print command
+    os.system(command)
