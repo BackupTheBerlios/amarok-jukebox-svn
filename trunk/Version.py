@@ -1,7 +1,7 @@
 import CGI
 
 # FIXME: As this is updated, Debug.py should also be modified
-Version = "0.6"
+Version = "0.6+SVN"
 
 def serve(request):
     doc = CGI.httpHeaders()
