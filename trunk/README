@@ -5,7 +5,7 @@ Run the script, point your browser to port 4475, and enjoy:
     http://localhost:4475/
 
 In order to run the script successfully, you'll need to have the
-Python DCOP and libxslt bindings installed.
+Python DCOP, libxml2 and libxslt bindings installed.
 
 Please report any problem and request via the Web interface:
 
